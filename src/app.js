@@ -1,6 +1,6 @@
 const express = require('express');
 
-const app =express();
+const app = express();
 
 // app.use("/",(req,res)=>{
 //     res.send("Hi this is the main page!");
@@ -12,30 +12,27 @@ const app =express();
 
 //Order matters, if I use the above code, it will override the below routes
 
+// app.get(\^/user\/ab?c$/,(req,res)=>{
+//     res.send({firstname:"Raja",lastname:"Babu"});
+// })
 
+// app.get("/user/:abcd", (req, res) => {
+//     console.log(req.params);
+//     res.send({ firstname: "Raja", lastname: "Babu" });
+// });
 
-app.get("/user",(req,res)=>{
-    res.send({firstname:"Raja",lastname:"Babu"});
-})
+// app.get("/user", (req, res) => {
+//     console.log(req.query);
+//     res.send("We have sent a response with query params");
+// });
 
-app.post("/user",(req,res)=>{
-    //logic for adding a new user
-    res.send("User added successfully!");
-})
+app.get("/user", (req, res, next) => {
+    console.log("This is user 1");
+    next();
+}, (req, res, next) => {
+    console.log("This is user 2");
+    res.send("2nd Response!!")
+});
 
-
-app.delete("/user",(req,res)=>{
-    //logic for deleting a user
-    res.send("User deleted successfully!");
-})
-
-//Below is a request handler
-app.use("/home",(req,res)=>{
-    res.send("Welcome to home page man!");
-})
-
-app.use("/test",(req,res)=>{
-    res.send("Hello World!");
-})
 
 app.listen(3000);
