@@ -2,25 +2,32 @@ const express = require('express');
 
 const app = express();
 
-//Writing a middleware to actually check if the admin is authorized
-const {isAdmin,isUser} = require("./middlewares/auth.js");
-
-app.use("/admin", isAdmin);
-
-app.post("/user/login",(req,res)=>{
-    res.send("User data is sent");
+app.use('/',(err,req,res,next)=>{
+    console.log("Error Checking1");
+    if(err){
+        res.status(500).send("An unexpected error occcured");
+    }
 })
 
-app.get("/user/data",isUser,(req,res)=>{
-    res.send("You are a valid User");
+//Error Handling
+app.get("/userData",(req,res)=>{
+    //try{
+        //Logic to fetch user details
+        throw new error("You stupiud");
+        res.send("User Details are here");
+    //}
+    //catch(err){
+    //    res.status(404).send("An error occured while fetching user details");
+    //}
+    
 });
 
-app.get("/admin/getAllData",(req,res)=>{
-        res.send("All Data is Sent!!")
-});
-
-app.get("/admin/deleteAUser",(req, res) => {
-        res.send("A user is deleted by admin!!");
+//Wildcard Error handling
+app.use('/',(err,req,res,next)=>{
+    console.log("Error Checking2");
+    if(err){
+        res.status(500).send("An unexpected error occcured");
+    }
 })
 
 
