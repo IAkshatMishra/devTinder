@@ -19,3 +19,8 @@
  - API - Get user by email
  - API - Feed API - GET /feed - get all the users from database
  - API - Get user by ID
+ - API - Create a delete user API
+ - Difference between PATCH and PUT
+ - API - to update a user
+ - What are the options in Model.findOneAndUpdate() method, explore more about it
+ - API - update the user with email ID

@@ -19,12 +19,11 @@ app.get("/user",async(req,res)=>{
         }
     }
     catch(err){
-        res.status(500).send("Some Error Occurred: "+err,message);
+        res.status(500).send("Some Error Occurred: "+err.message);
     }
 });
 
 //API - /feed API - get all the users from the collection
-
 app.get('/feed',async(req,res)=>{
     try{
         const allUsers = await User.find({});
@@ -41,7 +40,7 @@ app.get('/feed',async(req,res)=>{
 
 })
 
-
+//API - /signup API - to add a new user
 app.post('/signup',async(req,res)=>{
     // Adding a new user instance in the model
     const user = new User(req.body);
@@ -50,7 +49,7 @@ app.post('/signup',async(req,res)=>{
         res.send("User is added into collection successfully!")
     }
     catch(err){
-        res.status(500).send("Erroe faced while adding user: "+err.message);
+        res.status(500).send("Some Error Occurred: "+err.message);
     }
 
 })
@@ -61,6 +60,35 @@ app.get('/user/:id',async(req,res)=>{
     const findUser = await User.findById({_id:currentId});
     res.send(findUser);
 })
+
+//To delete a user
+app.delete('/user',async(req,res)=>{
+    const userID = req.body.userId;
+    try{
+        await User.findByIdAndDelete({_id:userID});
+        //await User.findByIdAndDelete(userID);
+        res.send("User deleted Successfully!");
+    }
+    catch(err){
+        res.status(500).send("Some Error Occurred: "+err.message);
+    }
+})
+
+// To update a user
+app.patch('/user',async(req,res)=>{
+    const userId = req.body.userId;
+    const data =req.body;
+    try{
+        const user=await User.findByIdAndUpdate({_id:userId},data,{
+            returnDocument:"after"
+        });
+        res.send("User updated succesfully! \n"+user);
+    }
+    catch(err){
+        res.status(500).send("Some Error Occurred: "+err.message);
+    }
+})
+
 
 connectDB()
 .then(()=>{
