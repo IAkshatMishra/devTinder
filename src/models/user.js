@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 // Creating a schema (Schema is definition of the structure of the document)
 const userSchema = new mongoose.Schema({
@@ -17,9 +18,19 @@ const userSchema = new mongoose.Schema({
         required:true,
         unique:true, // Ensures that emailId is unique across the collection
         trim:true,
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error("Not a valid email");
+            }
+        }
     },
     password:{
         type:String,
+        validate(value){
+            if(!validator.isStrongPassword(value)){
+                throw new Error("Please enter a strong password");
+            }
+        }
     },
     age:{
         type:Number,
@@ -37,7 +48,12 @@ const userSchema = new mongoose.Schema({
     },
     photoURL:{
         type:String,
-        default:"https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg"
+        default:"https://cdn.vectorstock.com/i/1000v/51/87/student-avatar-user-profile-icon-vector-47025187.jpg",
+        validate(value){
+            if(!validator.isURL(value)){
+                throw new Error("Not a valid photoURL");
+            }
+        }
     },
     about:{
         type:String,
