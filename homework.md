@@ -30,3 +30,5 @@
  - Create a custom validate for gender
  - Improve the DB schema - put all appropriate validation on each field in schema
  - Add timestamps to the userSchema 
+ - Add API level validation on PATCH request and Sign up POST API
+ - Data Sanitization - Add API validation for each field

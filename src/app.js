@@ -75,10 +75,30 @@ app.delete('/user',async(req,res)=>{
 })
 
 // To update a user
-app.patch('/user',async(req,res)=>{
-    const userId = req.body.userId;
+app.patch('/user/:userId',async(req,res)=>{
+    const userId = req.params?.userId;
     const data =req.body;
+    /*
+        {
+            "userId":"686c70cff508c5102088720b",
+            "firstName":"Alia",
+            "lastName":"Bhatt",
+            "emailId":"Alsia@bhatttttttttt.com",
+            "skills:":["Acting","Java","Node"],
+            "xyz":"fisgfyufg"
+        }
+     */
+
     try{
+        const UPDATE_ALLOWED = ["password","age","skills","photoURL","about"]
+    
+        const isValidUpdate = Object.keys(data).every((key)=>UPDATE_ALLOWED.includes(key)); 
+        if(!isValidUpdate){
+            throw new Error("These cannot be updated");
+        }
+        if(data?.skills.length>10){
+            throw new Error("Skills cannot be more than 10");
+        }
         const user=await User.findByIdAndUpdate({_id:userId},data,{
             returnDocument:"after",
             runValidators:true // This will ensure that the validators defined in the schema are applied during the update
