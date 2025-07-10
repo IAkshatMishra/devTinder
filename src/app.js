@@ -3,6 +3,9 @@ const express = require('express');
 const connectDB = require("./config/database");
 const app = express();
 const User=require("./models/user");
+const {signUpValidation} = require("./utils/validation");
+const bcrypt = require('bcrypt');
+const validator = require('validator');
 
 app.use(express.json()); // To parse JSON bodies
 
@@ -42,9 +45,21 @@ app.get('/feed',async(req,res)=>{
 
 //API - /signup API - to add a new user
 app.post('/signup',async(req,res)=>{
-    // Adding a new user instance in the model
-    const user = new User(req.body);
+
+    
     try{
+        //Validation for req.body
+        signUpValidation(req);
+        
+        const {firstName,lastName,emailId,password}=req.body
+
+        // Encryting the password
+        const passwordHash = await bcrypt.hash(password,10);
+        console.log("Password Hash: ",passwordHash);
+
+        // Adding a new user instance in the model
+        const user = new User({firstName,lastName,emailId,password:passwordHash});
+        
         await user.save();
         res.send("User is added into collection successfully!")
     }
@@ -53,6 +68,33 @@ app.post('/signup',async(req,res)=>{
     }
 
 })
+
+
+// API to login an existing user
+app.post('/login',async(req,res)=>{
+    try{
+        const {emailId,password}=req.body;
+
+        //Checking if the emailId even exists in the collection or not
+        const user = await User.findOne({emailId:emailId});
+        if(!user){
+            throw new Error("Invalid Credentials");
+        }
+
+        //Checking if the password is correct or not
+        const validPassword = await bcrypt.compare(password,user.password);
+        if(validPassword){
+            res.send("Login Successful!");
+        }
+        else{
+            throw new Error("Invalid Credentials");
+        }
+    }
+    catch(err){
+        res.status(500).send("Some Error Occurred: "+err.message);
+    }
+})
+
 
 app.get('/user/:id',async(req,res)=>{
     const currentId = req.params.id;
