@@ -6,8 +6,11 @@ const User=require("./models/user");
 const {signUpValidation} = require("./utils/validation");
 const bcrypt = require('bcrypt');
 const validator = require('validator');
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
 
 app.use(express.json()); // To parse JSON bodies
+app.use(cookieParser()); // To parse cookies
 
 //API - Get user by email
 app.get("/user",async(req,res)=>{
@@ -84,7 +87,13 @@ app.post('/login',async(req,res)=>{
         //Checking if the password is correct or not
         const validPassword = await bcrypt.compare(password,user.password);
         if(validPassword){
-            res.send("Login Successful!");
+            
+            //Create a jwt token
+            const token = await jwt.sign({_id:user._id},"DEV@Tinder#631!")
+
+            //Use cookie to store token
+            res.cookie("token",token);
+            res.send("User login successful!!")
         }
         else{
             throw new Error("Invalid Credentials");
@@ -95,6 +104,30 @@ app.post('/login',async(req,res)=>{
     }
 })
 
+
+// To get profile of a user
+app.get('/profile',async(req,res)=>{
+    try{
+        const cookies = req.cookies;
+        const {token} = cookies;
+        if(!token){
+            throw new Error("Invalid Token");
+        }
+        
+        const decodedMessage = await jwt.verify(token,"DEV@Tinder#631!");
+
+        const user =await User.findById({_id:decodedMessage._id});
+        
+        if(!user){
+            throw new Error("User does not exist");
+        }
+            res.send(user);
+
+    }
+    catch(err){
+        res.status(500).send("Some Error Occurred: "+err.message);
+    }
+})
 
 app.get('/user/:id',async(req,res)=>{
     const currentId = req.params.id;
