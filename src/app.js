@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 const validator = require('validator');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const {userAuth} = require('./middlewares/auth.js')
 
 app.use(express.json()); // To parse JSON bodies
 app.use(cookieParser()); // To parse cookies
@@ -89,10 +90,10 @@ app.post('/login',async(req,res)=>{
         if(validPassword){
             
             //Create a jwt token
-            const token = await jwt.sign({_id:user._id},"DEV@Tinder#631!")
+            const token = await jwt.sign({_id:user._id},"DEV@Tinder#631!",{expiresIn:'7d'});//
 
             //Use cookie to store token
-            res.cookie("token",token);
+            res.cookie("token",token,{expires: new Date(Date.now() +1000*60*60*24*7)});
             res.send("User login successful!!")
         }
         else{
@@ -106,21 +107,9 @@ app.post('/login',async(req,res)=>{
 
 
 // To get profile of a user
-app.get('/profile',async(req,res)=>{
+app.get('/profile',userAuth,async(req,res)=>{
     try{
-        const cookies = req.cookies;
-        const {token} = cookies;
-        if(!token){
-            throw new Error("Invalid Token");
-        }
-        
-        const decodedMessage = await jwt.verify(token,"DEV@Tinder#631!");
-
-        const user =await User.findById({_id:decodedMessage._id});
-        
-        if(!user){
-            throw new Error("User does not exist");
-        }
+        const user = req.user;
             res.send(user);
 
     }
@@ -129,59 +118,12 @@ app.get('/profile',async(req,res)=>{
     }
 })
 
-app.get('/user/:id',async(req,res)=>{
-    const currentId = req.params.id;
-
-    const findUser = await User.findById({_id:currentId});
-    res.send(findUser);
-})
-
-//To delete a user
-app.delete('/user',async(req,res)=>{
-    const userID = req.body.userId;
+app.post('/sendConnectionRequest',userAuth,async(req,res)=>{
     try{
-        await User.findByIdAndDelete({_id:userID});
-        //await User.findByIdAndDelete(userID);
-        res.send("User deleted Successfully!");
+        res.send(req.user.firstName+" sent you a connection Request!")
     }
     catch(err){
-        res.status(500).send("Some Error Occurred: "+err.message);
-    }
-})
-
-// To update a user
-app.patch('/user/:userId',async(req,res)=>{
-    const userId = req.params?.userId;
-    const data =req.body;
-    /*
-        {
-            "userId":"686c70cff508c5102088720b",
-            "firstName":"Alia",
-            "lastName":"Bhatt",
-            "emailId":"Alsia@bhatttttttttt.com",
-            "skills:":["Acting","Java","Node"],
-            "xyz":"fisgfyufg"
-        }
-     */
-
-    try{
-        const UPDATE_ALLOWED = ["password","age","skills","photoURL","about"]
-    
-        const isValidUpdate = Object.keys(data).every((key)=>UPDATE_ALLOWED.includes(key)); 
-        if(!isValidUpdate){
-            throw new Error("These cannot be updated");
-        }
-        if(data?.skills.length>10){
-            throw new Error("Skills cannot be more than 10");
-        }
-        const user=await User.findByIdAndUpdate({_id:userId},data,{
-            returnDocument:"after",
-            runValidators:true // This will ensure that the validators defined in the schema are applied during the update
-        });
-        res.send("User updated succesfully!");
-    }
-    catch(err){
-        res.status(500).send("Some Error Occurred: "+err.message);
+        res.send("Some Error Occured: "+err.message)
     }
 })
 
