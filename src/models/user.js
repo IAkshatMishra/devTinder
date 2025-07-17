@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 // Creating a schema (Schema is definition of the structure of the document)
 const userSchema = new mongoose.Schema({
@@ -66,6 +68,20 @@ const userSchema = new mongoose.Schema({
     timestamps:true // Automatically adds createdAt and updatedAt fields
 });
 
-// Creating a model (Model is a class that is used to create and read documents from the collection)
 
+userSchema.methods.getJWT = async function(){
+    //The "this" inside the method refers to the individual document instance of that model.
+    const user =this;
+    const token = await jwt.sign({_id:user._id},"DEV@Tinder#631!",{expiresIn:'7d'});
+    return token;
+}
+
+userSchema.methods.comparePasswords = async function(passwordInputByUser){
+    const user = this;
+    isValidPassword = await bcrypt.compare(passwordInputByUser,user.password);
+    return isValidPassword;
+}
+ 
+
+// Creating a model (Model is a class that is used to create and read documents from the collection)
 module.exports = mongoose.model("User",userSchema);
