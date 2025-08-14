@@ -13,39 +13,6 @@ const {userAuth} = require('./middlewares/auth.js')
 app.use(express.json()); // To parse JSON bodies
 app.use(cookieParser()); // To parse cookies
 
-//API - Get user by email
-app.get("/user",async(req,res)=>{
-    try{
-        const userInfo = await User.find({emailId:req.body.emailId});
-        
-        if(userInfo.length===0){
-            res.status(404).send("No user found");
-        }
-        else{
-            res.send(userInfo);
-        }
-    }
-    catch(err){
-        res.status(500).send("Some Error Occurred: "+err.message);
-    }
-});
-
-//API - /feed API - get all the users from the collection
-app.get('/feed',async(req,res)=>{
-    try{
-        const allUsers = await User.find({});
-        if(allUsers.length===0){
-            res.status(404).send("No users found in the collection!");
-        }
-        else{
-            res.send(allUsers);
-        }
-    }
-    catch(err){
-        res.status(500).send("Some Error Occurred: "+err.message);
-    }
-
-})
 
 //API - /signup API - to add a new user
 app.post('/signup',async(req,res)=>{
@@ -73,7 +40,6 @@ app.post('/signup',async(req,res)=>{
 
 })
 
-
 // API to login an existing user
 app.post('/login',async(req,res)=>{
     try{
@@ -86,7 +52,7 @@ app.post('/login',async(req,res)=>{
         }
 
         //Checking if the password is correct or not
-        const isValidPassword = user.comparePasswords(password);
+        const isValidPassword =await user.comparePasswords(password);
         if(isValidPassword){
             
             //Create a jwt token
@@ -103,7 +69,6 @@ app.post('/login',async(req,res)=>{
         res.status(500).send("Some Error Occurred: "+err.message);
     }
 })
-
 
 // To get profile of a user
 app.get('/profile',userAuth,async(req,res)=>{

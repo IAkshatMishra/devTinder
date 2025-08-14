@@ -54,3 +54,7 @@
  - Set the expiry of jwt token and cookies to 7 days
  - Create userSchema method to getJWT()
  - Create userSchema method to comparepassword(passwordInputByUser)
+
+ - Explore Tinder APIs
+ - Create a list of APIs you can think of in DevTinder
+ - Group multiple routes under respective routers
