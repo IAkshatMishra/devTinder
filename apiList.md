@@ -6,7 +6,7 @@
 - POST /logout
 
 ## profileRouter
-- GET /porfile/view
+- GET /profile/view
 - PATCH /profile/edit
 - PATCH /profile/password
 
