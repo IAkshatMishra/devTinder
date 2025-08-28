@@ -32,4 +32,16 @@ const validateEditProfileData = (req) => {
     return isEditAllowed;
 }
 
-module.exports = { signUpValidation, validateEditProfileData };
+const validateEditProfilePasswordData = (req) =>{
+    const {currentPassword, newPassword} = req.body;
+    
+    if(!currentPassword || !newPassword){
+        throw new Error("Please enter a valid current and new password");
+    }
+
+    if(!validator.isStrongPassword(newPassword)){
+        throw new Error("Please enter a strong password");
+    }
+}
+
+module.exports = { signUpValidation, validateEditProfileData, validateEditProfilePasswordData };
