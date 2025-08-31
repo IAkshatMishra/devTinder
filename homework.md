@@ -67,3 +67,14 @@
  - Create PATCH /profile/password API ==> forgot password API
  - Make sure you validate data in all POST,PATCH APIs
  - Git Commit "logout + edit profile APIs"
+
+- Create Connection Request Schema
+- Create Send Connection Request API
+- Proper validation of data
+- Think about all corner cases
+- $or query, $and query in mongodb -> https://www.mongodb.com/docs/manual/reference/operator/query/or/
+- schema.pre("save") function
+- Read more about indexes in mongodb
+- Why do we need indexes in DB, advantages and disadvantages of creating indexes
+- Read this article about compound indexes -> https://www.mongodb.com/docs/manual/core/indexes/index-types/index-compound/
+- ALWAYS THINK ABOUT CORNER CASES 

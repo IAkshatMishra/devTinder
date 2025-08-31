@@ -10,12 +10,13 @@
 - PATCH /profile/edit
 - PATCH /profile/password
 
-Status : ignore, interested, accepted, rejected
+Status : ignored, interested, accepted, rejected
 
 ## connectionRequestRouter
 //* When sending a new request to a person
 - POST /send/request/interested/:userId
 - POST /send/request/ignored/:userId
+
 //* When reviewing a request sent to a person
 - POST /send/review/accepted/:requestId
 - POST /send/review/rejected/:requestId
