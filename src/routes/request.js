@@ -13,6 +13,7 @@ requestRouter.post('/sendConnectionRequest',userAuth,async(req,res)=>{
         res.send("Some Error Occured: "+err.message)
     }
 })
+
 requestRouter.post('/send/request/:status/:toUserId',userAuth,async(req,res)=>{
     try{
         const fromUserId = req.user._id;
@@ -65,6 +66,41 @@ requestRouter.post('/send/request/:status/:toUserId',userAuth,async(req,res)=>{
     }
     catch(err){
         res.status(400).send("Some Error Occured: "+err.message);
+    }
+})
+
+requestRouter.post("/send/review/:status/:requestId",userAuth,async(req,res)=>{
+    try{
+        const loggedInUser = req.user;
+        const {status,requestId} = req.params;
+
+        // Only status allowed to be sent here is "accepted" or "rejected"
+        const allowedStatus = ["accepted","rejected"];
+        if(!allowedStatus.includes(status)){
+            return res.status(400).json({message:"Not a valid Status"});
+        }
+        // Sehwag ne interested request bheji hai sachin ko
+        // Accept or reject mai tabhi kr skta hu jab
+        // 1) sachin logged in ho
+        // 2) requestId sahi ho
+        // 3) Jab sehwag interested ho
+        
+        const connectionRequest = await ConnectionRequest.findOne({
+            _id:requestId,
+            toUserId:loggedInUser._id,
+            status:"interested"
+        })
+        if(!connectionRequest){
+            return res.status(400).json({message:"Connection Request is not valid"});
+        }
+
+        connectionRequest.status = status;
+        const data = await connectionRequest.save();
+        return res.json({message:`Connection Request ${status}!`,data})
+
+    }
+    catch(err){
+        res.status(500).send("Some Error Occured : "+err.message)
     }
 })
 

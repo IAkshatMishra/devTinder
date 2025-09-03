@@ -78,3 +78,5 @@
 - Why do we need indexes in DB, advantages and disadvantages of creating indexes
 - Read this article about compound indexes -> https://www.mongodb.com/docs/manual/core/indexes/index-types/index-compound/
 - ALWAYS THINK ABOUT CORNER CASES 
+
+- Write code with proper validation for POST /send/review/:status/:requestId
