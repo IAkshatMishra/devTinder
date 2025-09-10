@@ -22,6 +22,6 @@ Status allowed here would be ["ignored","interested"]
 Status allowed here would be ["accepted","rejected"]
 
 ## userRouter
+- GET /user/requests/received - gets all the request the user has received
 - GET /user/connections
-- GET /user/requests - gets all the request the user has received
 - GET /user/feed - gets all the other users on the platform

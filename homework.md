@@ -80,3 +80,8 @@
 - ALWAYS THINK ABOUT CORNER CASES 
 
 - Write code with proper validation for POST /send/review/:status/:requestId
+- Thought process - POST vs GET
+- Read about ref and populate https://mongoosejs.com/docs/populate.html
+- Create GET /user/requests/received with all the chcecks
+- Create GET /user/connections
+

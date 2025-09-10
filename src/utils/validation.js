@@ -19,7 +19,7 @@ const signUpValidation = (req) => {
 }
 
 const validateEditProfileData = (req) => {
-    const fieldsAllowedToEdit = ["firstName", "lastName", "age", "gender", "photoURL", "about", "skills"];
+    const fieldsAllowedToEdit = ["firstName", "lastName", "emailId","age", "gender", "photoURL", "about", "skills"];
     if(!req.body || Object.keys(req.body).length === 0){
         throw new Error("Please provide data to edit profile");
     }
