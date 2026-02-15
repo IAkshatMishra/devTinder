@@ -33,7 +33,7 @@ profileRouter.patch('/profile/edit',userAuth,async(req,res)=>{
 
     }
     catch(err){
-            res.status(500).send("Some Error Occurred4: "+err.message);
+            res.status(500).send("Some Error Occurred: "+err.message);
         }
 })
 
@@ -62,7 +62,7 @@ profileRouter.patch('/profile/password',userAuth,async(req,res)=>{
         res.send("Password is updated succesfully, please login again with new password");
     }
     catch(err){
-        res.status(500).send("Some error occured5: "+err.message);
+        res.status(500).send("Some Error Occured: "+err.message);
     }
 })
 

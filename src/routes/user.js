@@ -52,7 +52,7 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
         res.json({ data });
     }
     catch (err) {
-        res.status(500).json({ message: "Some error occured6: " + err.message })
+        res.status(500).json({ message: "Some Error Occured: " + err.message })
     }
 })
 
