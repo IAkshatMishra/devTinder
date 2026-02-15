@@ -32,7 +32,7 @@ authRouter.post('/signup', async (req, res) => {
         res.json({ message: "User Added Successfully!", data: savedUser })
     }
     catch (err) {
-        res.status(500).send("Some Error Occurred: " + err.message);
+        res.status(500).send("Some Error Occurred2: " + err.message);
     }
 
 });
@@ -64,7 +64,7 @@ authRouter.post('/login', async (req, res) => {
         }
     }
     catch (err) {
-        res.status(500).send("Some Error Occurred: " + err.message);
+        res.status(500).send("Some Error Occurred3: " + err.message);
     }
 })
 
