@@ -24,9 +24,9 @@ const validateEditProfileData = (req) => {
         throw new Error("Please provide data to edit profile");
     }
 
-    if(req.body.photoURL && !validator.isURL(req.body.photoURL)){
-        throw new Error("Please enter a valid URL");
-    }
+    // if(req.body.photoURL && !validator.isURL(req.body.photoURL)){
+    //     throw new Error("Please enter a valid URL");
+    // }
 
     const isEditAllowed = Object.keys(req.body).every((field)=>{return fieldsAllowedToEdit.includes(field)});
     return isEditAllowed;
